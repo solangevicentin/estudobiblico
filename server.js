@@ -29,8 +29,8 @@ server.get('/livro', async function(request, response) {
 })
 
 server.get('/livro/search', async function(request, response) {
-    const livro = request.query.livro;
-    const sql = `SELECT * FROM livro WHERE livro ILIKE $1`;
+    const livros = request.query.livros;
+    const sql = `SELECT * FROM livro WHERE livros ILIKE $1`;
     const result = await pool.query(sql, ["%" +  livro + "%"]);
     return response.json(result.rows);
 })
@@ -44,12 +44,12 @@ server.get('/livro/:id', async function(request, response) {
 
 //POST
 server.post('/livro', async function(request, response) {
-    const livro = request.body.livro;
+    const livros = request.body.livros;
     const capitulo = request.body.capitulo;
     const versiculo = request.body.versiculo;
 
-    const sql= `INSERT INTO livro (livro,capitulo,versiculo,lido) VALUES ($1, $2, $3, $4)`;
-    await pool.query(sql, [livro, capitulo,versiculo, false]);
+    const sql= `INSERT INTO livro (livros,capitulo,versiculo,lido) VALUES ($1, $2, $3, $4)`;
+    await pool.query(sql, [livros, capitulo,versiculo, false]);
     return response.status(204).send();
 })
  
@@ -63,9 +63,9 @@ server.delete('/livro/:id', async function(request, response) {
 //UPDATE
 server.put('/livro/:id', async function(request, response) {
     const id = request.params.id;
-    const { livro, capitulo, versiculo, lido } = request.body;
-    const sql = `UPDATE livro SET livro = $1, capitulo = $2, versiculo = $3, lido = $4 WHERE id = $5`;
-    await pool.query(sql, [livro, capitulo, versiculo, lido, id]);
+    const { livros, capitulo, versiculo, lido } = request.body;
+    const sql = `UPDATE livro SET livros = $1, capitulo = $2, versiculo = $3, lido = $4 WHERE id = $5`;
+    await pool.query(sql, [livros, capitulo, versiculo, lido, id]);
     return response.status(204).send();
 })
 
